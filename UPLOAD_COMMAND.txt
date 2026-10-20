@@ -1,0 +1,71 @@
+=================================================================
+SIMPLE UPLOAD COMMAND - COPY AND PASTE THIS
+=================================================================
+
+STEP 1: Open PowerShell and run:
+
+scp "c:\Users\Andrei sam\Downloads\CRACK TRACKING SYSTEM\raspberry_pi\fully_autonomous_wall_scanner.py" pi@192.168.168.127:/home/pi/crack_detector/
+
+(Enter password when prompted: raspberry)
+
+
+STEP 2: Verify upload (SSH into Pi):
+
+ssh pi@192.168.168.127
+
+(Enter password: raspberry)
+
+
+STEP 3: On Pi, verify file:
+
+ls -lh /home/pi/crack_detector/fully_autonomous_wall_scanner.py
+grep -c "log_to_scan_monitor" /home/pi/crack_detector/fully_autonomous_wall_scanner.py
+
+(Should show 50+ matches if upload successful)
+
+
+STEP 4: Exit Pi:
+
+exit
+
+
+=================================================================
+ALTERNATIVE: Use WinSCP (GUI)
+=================================================================
+
+1. Open WinSCP
+2. Connect to: 192.168.168.127
+3. Username: pi
+4. Password: raspberry (or your password)
+5. Navigate to: /home/pi/crack_detector/
+6. Drag and drop: fully_autonomous_wall_scanner.py
+7. Click YES to overwrite
+
+
+=================================================================
+WHAT'S NEW IN THIS FILE
+=================================================================
+
+✓ Real-time logging to ~/scan_output.log
+✓ Timestamps for every action [HH:MM:SS]
+✓ Icons for different events (🔍🌡️📷🚨)
+✓ Wall search progress logged
+✓ Position-by-position tracking
+✓ Distance readings logged
+✓ Thermal analysis results logged
+✓ Movement commands logged (lateral, turns, row transitions)
+✓ Crack detection with full details
+
+Now the web dashboard LIVE SCAN MONITOR will show EVERYTHING
+the robot does in real-time!
+
+
+=================================================================
+AFTER UPLOAD - TEST IT
+=================================================================
+
+1. Open: http://192.168.168.127:5000
+2. Click: "Start Autonomous Scan"
+3. Scroll to: "🟢 LIVE SCAN MONITOR"
+4. Watch: Detailed real-time progress with timestamps!
+

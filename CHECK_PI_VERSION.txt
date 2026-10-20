@@ -1,0 +1,30 @@
+=================================================================
+CHECK WHAT VERSION IS ON PI - ONE COMMAND
+=================================================================
+
+Copy and paste this command to check Pi status:
+
+ssh pi@192.168.168.127 "grep -c 'Number of Cracks' /home/pi/web_data_analytics.py"
+
+
+EXPECTED RESULT:
+
+0  <-- This means NEW version (manual input removed)
+
+If you see 1 or more = OLD version still on Pi!
+
+
+=================================================================
+QUICK FIX IF OLD VERSION:
+=================================================================
+
+1. Upload new file:
+scp "c:\Users\Andrei sam\Downloads\CRACK TRACKING SYSTEM\raspberry_pi\web_data_analytics.py" pi@192.168.168.127:/home/pi/
+
+2. Restart service:
+ssh pi@192.168.168.127 "sudo pkill -9 -f web_data_analytics; nohup python3 /home/pi/web_data_analytics.py > /home/pi/analytics.log 2>&1 &"
+
+3. Clear browser cache (Ctrl+Shift+Delete)
+
+4. Refresh: http://192.168.168.127:8080
+

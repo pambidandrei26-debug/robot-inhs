@@ -1,0 +1,330 @@
+================================================================================
+SIMPLIFIED CLEAN DIAGRAM PROMPT
+For Cleaner, More Professional Robot Illustration
+================================================================================
+
+PROBLEM WITH PREVIOUS OUTPUT:
+- Too cluttered with labels
+- Wiring too busy
+- Hard to see individual components
+- Text overlapping
+
+NEW APPROACH: Clean, minimal, professional
+
+================================================================================
+PROMPT 1: MINIMALIST TECHNICAL ILLUSTRATION (RECOMMENDED)
+================================================================================
+
+Create a clean, minimalist technical illustration of an autonomous crack detection robot with the following specifications:
+
+STYLE REQUIREMENTS:
+- Clean white background
+- Soft shadows under robot only
+- Minimal text labels (only major components)
+- Use leader lines with small dots at connection points
+- Component colors: Robot chassis (sky blue), PCBs (actual colors), wires (color-coded but subtle)
+- Isometric 3/4 view from front-left at 30-degree angle
+- Professional product photography style
+- No background grid or technical clutter
+
+ROBOT STRUCTURE:
+Base Platform (25cm x 15cm):
+- Bright blue Makeblock aluminum chassis with rectangular perforations
+- Two black rubber tank treads (left and right)
+- Silver drive wheels visible inside treads
+- Clean, smooth appearance
+
+Electronics Bay (middle section):
+- MegaPi controller board (blue PCB) mounted horizontally
+- Raspberry Pi 3 B+ (green PCB) mounted above MegaPi
+- Small blue buck converter module visible
+- White rectangular battery pack (12V LiPo)
+- Components neatly arranged, no wire mess
+
+Vertical Arm (50cm tall):
+- Single clean blue aluminum beam rising from base
+- Articulated sections with visible pivot joints
+- Arm motor (silver cylinder) at pivot point
+- Black gripper/claw at top end
+
+Front Sensors (mounted low, facing forward):
+- Small ultrasonic sensor (two black cylinders side by side)
+- Raspberry Pi camera (small black lens module)
+- Tiny MLX90640 thermal sensor next to camera
+
+LABELING STYLE:
+Use only 8 main labels with thin leader lines:
+1. "Articulated Arm" → pointing to vertical beam
+2. "Gripper" → pointing to claw
+3. "Raspberry Pi 3B+" → pointing to green board
+4. "MegaPi Controller" → pointing to blue board
+5. "Camera & Thermal" → pointing to front sensor cluster
+6. "Ultrasonic Sensor" → pointing to HC-SR04
+7. "Tank Treads" → pointing to one tread
+8. "12V Battery" → pointing to battery pack
+
+Place labels OUTSIDE the robot perimeter with clean horizontal lines, not overlapping.
+
+WIRING:
+Show only major power cables:
+- Two thick red/black cables from battery (one to MegaPi, one to buck converter)
+- One blue USB cable between MegaPi and Pi (subtle, not prominent)
+- NO individual GPIO wires visible (keeps it clean)
+
+LIGHTING:
+- Soft directional light from top-left
+- Gentle shadows underneath robot
+- Slight reflection on aluminum surfaces
+- No harsh highlights
+
+DIMENSIONS:
+Add a simple dimension indicator:
+- Small dimension line showing "~50cm" height
+- Small dimension line showing "~25cm" base width
+- Placed subtly at edge of image
+
+TECHNICAL SPECS BOX (optional, small, bottom corner):
+┌──────────────────────────┐
+│ Specifications:          │
+│ • Height: 50cm           │
+│ • Weight: 2kg            │
+│ • Battery: 30-45 min     │
+│ • 4 Sensors (RGBT+U+A)   │
+└──────────────────────────┘
+
+Keep this box SMALL (5% of image size) and place in bottom-right corner.
+
+WHAT TO AVOID:
+✗ Wire spaghetti showing every connection
+✗ Too many labels pointing everywhere
+✗ Cluttered background with grids
+✗ Overly detailed component internals
+✗ Text overlapping components
+✗ Busy technical drawings style
+
+WHAT TO EMPHASIZE:
+✓ Clean silhouette of robot
+✓ Blue Makeblock structure clearly visible
+✓ Tank treads prominent
+✓ Vertical arm impressive and clear
+✓ Sensors visible but not overwhelming
+✓ Professional product shot aesthetic
+
+OUTPUT STYLE:
+Think "Apple product page" clean design, not "engineering blueprint" busy style. 
+The robot should look professional, modern, and easy to understand at a glance.
+
+================================================================================
+PROMPT 2: FLAT DESIGN INFOGRAPHIC STYLE
+================================================================================
+
+Create a flat design infographic-style illustration of an autonomous robot:
+
+STYLE:
+- Flat colors (no gradients, no shadows)
+- Vector art appearance
+- Simple geometric shapes
+- Bold, clean lines
+- White or light gray background
+
+ROBOT REPRESENTATION:
+- Simplified shapes showing main structure:
+  * Rectangle base with rounded corners (blue)
+  * Two black ovals for tank treads
+  * Tall blue rectangle for vertical arm
+  * Small black shape for gripper
+  
+- PCB boards shown as simple rectangles:
+  * Blue rectangle = MegaPi
+  * Green rectangle = Raspberry Pi
+  * Small blue square = Buck converter
+
+- Sensors as simple icons:
+  * Camera = small black circle
+  * Ultrasonic = two dots side by side
+  * Thermal = small square
+  * Battery = rectangle with + symbol
+
+LABELS:
+Use icons + text in clean sans-serif font:
+📷 Camera System
+🌡️ Thermal Imaging  
+📏 Distance Sensing
+🎵 Acoustic Detection
+🔋 Power System
+🧠 Processing (Pi + MegaPi)
+🦾 Articulated Arm
+
+Place labels to the right of robot with connecting lines.
+
+COLOR PALETTE:
+- Blue: #0088CC (robot chassis)
+- Green: #00AA44 (Raspberry Pi)
+- Black: #333333 (treads, gripper)
+- Red: #DD3333 (power indicators)
+- White: #FFFFFF (background)
+- Gray: #EEEEEE (subtle elements)
+
+LAYOUT:
+- Robot on left 60% of image
+- Labels/legend on right 40%
+- Title at top: "Autonomous Crack Detection Robot"
+- Clean, infographic magazine style
+
+================================================================================
+PROMPT 3: EXPLODED VIEW - CLEAN VERSION
+================================================================================
+
+Create a clean exploded assembly view showing 5 main assemblies only (not every screw):
+
+VERTICAL STACK (bottom to top):
+
+1. BASE ASSEMBLY (bottom)
+   - Tank tread system (assembled)
+   - Base platform
+   - Label: "Mobility Platform"
+
+2. POWER & CONTROL (elevated 5cm)
+   - MegaPi board + Battery + Buck converter (as one unit)
+   - Label: "Power & Motor Control"
+
+3. COMPUTING (elevated 5cm more)
+   - Raspberry Pi 3 B+
+   - Label: "Vision Processing"
+
+4. SENSOR SUITE (elevated 5cm more)
+   - Camera + Thermal + Ultrasonic (grouped together)
+   - Label: "Multi-Sensor Array"
+
+5. ARM ASSEMBLY (elevated 5cm more)
+   - Complete arm with gripper
+   - Label: "Articulated Arm"
+
+STYLE:
+- Clean separation between levels
+- Soft shadows below each assembly
+- Thin dotted lines showing alignment
+- White background
+- No wire mess
+- Minimal labels (just 5 main ones)
+
+================================================================================
+PROMPT 4: SIDE-BY-SIDE COMPARISON VIEW
+================================================================================
+
+Create a clean comparison showing robot in three states:
+
+LAYOUT: Three panels side by side:
+
+LEFT PANEL: "Stowed Position"
+- Robot compact, arm vertical
+- All sensors facing forward
+- Clean profile view
+- Label dimensions
+
+MIDDLE PANEL: "Scanning Position"  
+- Arm extended toward wall
+- Camera/sensors active (small glow effect)
+- Show 30cm distance to wall (dotted line)
+- Clean 3/4 view
+
+RIGHT PANEL: "Component Overview"
+- Simple numbered diagram showing:
+  1. Tank Treads
+  2. MegaPi + Motors
+  3. Raspberry Pi
+  4. Camera System
+  5. Articulated Arm
+  6. Battery & Power
+
+STYLE:
+- White background for all three panels
+- Thin vertical dividers between panels
+- Clean, minimal labeling
+- Professional multi-view technical sheet
+
+================================================================================
+PROMPT 5: MINIMALIST SCHEMATIC STYLE
+================================================================================
+
+Create a simplified schematic representation (not realistic render):
+
+STYLE:
+- Black line art on white background
+- Simple geometric shapes
+- Like a clean logo or icon
+- Minimal detail but recognizable
+
+COMPONENTS SHOWN AS SIMPLE SHAPES:
+- Base = rectangle
+- Treads = two thick black lines
+- Arm = vertical line with segments
+- Gripper = small pincer symbol
+- Pi/MegaPi = two small squares
+- Sensors = small circles/squares
+- Battery = rectangle with lightning bolt
+
+Add only component names in clean sans-serif font below each element.
+
+ULTRA MINIMAL - looks like a professional technical icon set.
+
+================================================================================
+HOW TO GET BETTER RESULTS
+================================================================================
+
+FOR DALL-E 3:
+1. Use PROMPT 1 (Minimalist) first - cleanest output
+2. Say: "Make it look like an Apple product photo - very clean and minimal"
+3. If still cluttered: "Remove all the wire details, show only the robot structure"
+4. If labels overlap: "Move all labels outside the robot with simple leader lines"
+
+FOR MIDJOURNEY:
+Add these parameters:
+--style raw --ar 16:9 --v 6 --quality 2
+
+Use this suffix:
+"clean product photography, white background, soft shadows, minimal labels, professional"
+
+FOR LEONARDO.AI:
+- Choose "Product Photography" preset
+- Use "Clean Background" option
+- Set "Guidance Scale" to 8
+- Generate 4 versions, pick cleanest
+
+SIMPLIFICATION TIPS:
+✓ Ask for "product photography style" not "technical diagram"
+✓ Specify "minimal labels" or "only 5-8 labels maximum"
+✓ Say "no wiring detail visible" to avoid wire mess
+✓ Request "white background" for clean look
+✓ Use "soft shadows only" not harsh technical lighting
+
+EXAMPLES OF WHAT TO SAY:
+- "Create this but with the cleanliness of an Apple product page"
+- "Minimal labels, clean lines, white background"
+- "Make it look like a professional product catalog photo"
+- "Simple and clean, not cluttered technical drawing"
+- "Show the robot structure clearly without wire spaghetti"
+
+================================================================================
+EXPECTED IMPROVEMENT
+================================================================================
+
+BEFORE (cluttered):
+- 20+ labels all over
+- Wires everywhere
+- Hard to see robot shape
+- Text overlapping
+- Busy background
+
+AFTER (clean):
+- 8 or fewer labels
+- No visible wire clutter
+- Robot structure clear
+- Text neatly placed outside
+- White clean background
+- Professional product shot look
+
+The robot will look like something from a tech company product page - 
+clean, modern, professional, easy to understand!
+
+================================================================================

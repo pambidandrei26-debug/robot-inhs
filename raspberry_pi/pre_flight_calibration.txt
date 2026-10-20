@@ -1,0 +1,48 @@
+﻿
+# Add this before main() function
+def pre_flight_check(scanner):
+    """Pre-flight calibration and system check"""
+    print("\n" + "="*70)
+    print("  PRE-FLIGHT CALIBRATION")
+    print("="*70)
+    print("\n1. Test 360 rotation")
+    print("2. Test ultrasonic sensor")
+    print("3. Test motors")
+    print("4. Skip - START MISSION")
+    print("q. Quit")
+    
+    choice = input("\nChoice: ").strip()
+    
+    if choice == '1':
+        print("\nTesting 360 rotation with [2150,2150,2150,2100]ms...")
+        input("Press Enter when ready...")
+        for i in range(4):
+            scanner.robot.turn_right(80, [2150,2150,2150,2100][i])
+            time.sleep([2150,2150,2150,2100][i]/1000 + 1.5)
+        print("Done! Did it return to start? Check visually.")
+        input("Press Enter to continue...")
+    
+    elif choice == '2':
+        print("\nTesting ultrasonic...")
+        for i in range(5):
+            d = scanner.robot.get_ultrasonic_distance()
+            print(f"  {i+1}. {d:.1f}cm" if d else f"  {i+1}. ERROR")
+            time.sleep(0.5)
+        input("Press Enter to continue...")
+    
+    elif choice == '3':
+        print("\nTesting motors...")
+        print("Forward..."); scanner.robot.move_forward(70, 1000); time.sleep(2)
+        print("Backward..."); scanner.robot.move_backward(70, 1000); time.sleep(2)
+        print("Right 90..."); scanner.robot.turn_right(80, 2150); time.sleep(3.5)
+        print("Left 90..."); scanner.robot.turn_left(80, 2150); time.sleep(3.5)
+        input("Press Enter to continue...")
+    
+    elif choice == '4':
+        return True
+    
+    elif choice.lower() == 'q':
+        return False
+    
+    return pre_flight_check(scanner)  # Loop back
+

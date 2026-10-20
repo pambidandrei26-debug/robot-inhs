@@ -1,0 +1,48 @@
+=================================================================
+UPLOAD BOTH FILES - SIMPLE COMMANDS
+=================================================================
+
+COPY AND PASTE THESE TWO COMMANDS IN POWERSHELL:
+
+=================================================================
+COMMAND 1: Upload Analytics Dashboard (Port 8080)
+=================================================================
+
+scp "c:\Users\Andrei sam\Downloads\CRACK TRACKING SYSTEM\raspberry_pi\web_data_analytics.py" pi@192.168.168.127:/home/pi/
+
+(Enter password when prompted)
+
+
+=================================================================
+COMMAND 2: Upload Scanner with Live Monitor
+=================================================================
+
+scp "c:\Users\Andrei sam\Downloads\CRACK TRACKING SYSTEM\raspberry_pi\fully_autonomous_wall_scanner.py" pi@192.168.168.127:/home/pi/crack_detector/
+
+(Enter password when prompted)
+
+
+=================================================================
+COMMAND 3: Restart Analytics Service
+=================================================================
+
+ssh pi@192.168.168.127
+
+(Enter password, then run on Pi:)
+
+pkill -f web_data_analytics; nohup python3 ~/web_data_analytics.py > ~/analytics.log 2>&1 &
+
+exit
+
+
+=================================================================
+DONE! TEST NOW:
+=================================================================
+
+Analytics: http://192.168.168.127:8080
+- Should show crack size table (no manual input)
+
+Main Dashboard: http://192.168.168.127:5000  
+- Start autonomous scan
+- Check LIVE SCAN MONITOR (should show timestamps)
+

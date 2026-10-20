@@ -1,0 +1,59 @@
+﻿
+    def move_forward_safe(self, speed=FORWARD_SPEED, duration_ms=MOVE_STEP_DURATION, verify=True):
+        """Move forward with stuck detection"""
+        if not verify:
+            return self.move_forward(speed, duration_ms)
+        
+        # Get distance before movement
+        dist_before = self.get_ultrasonic_distance()
+        
+        # Execute movement
+        success = self.move_forward(speed, duration_ms)
+        if not success:
+            return False
+        
+        # Wait for movement to complete
+        time.sleep(duration_ms / 1000 + 0.5)
+        
+        # Get distance after movement
+        dist_after = self.get_ultrasonic_distance()
+        
+        # Check if robot actually moved
+        if dist_before and dist_after:
+            # Allow for sensor noise (2cm tolerance)
+            distance_change = abs(dist_before - dist_after)
+            
+            # If moving toward wall, distance should DECREASE
+            # If stuck, distance stays same
+            if distance_change < 2.0:
+                print("WARNING: Robot might be stuck! Distance unchanged.")
+                print(f"  Before: {dist_before:.1f}cm, After: {dist_after:.1f}cm")
+                return False
+        
+        return True
+    
+    def get_ultrasonic_distance_robust(self, samples=3):
+        """Get ultrasonic distance with multiple samples to handle angle issues"""
+        readings = []
+        
+        for i in range(samples):
+            dist = self.get_ultrasonic_distance()
+            if dist and dist < 999:  # Filter out 400/999 errors
+                readings.append(dist)
+            time.sleep(0.2)  # Short delay between readings
+        
+        if not readings:
+            return None
+        
+        # Use median to filter outliers
+        readings.sort()
+        median_idx = len(readings) // 2
+        median_dist = readings[median_idx]
+        
+        # If all readings are high (>300cm), sensor might be angled wrong
+        if median_dist > 300:
+            print(f"  WARNING: High distance reading ({median_dist:.1f}cm)")
+            print(f"  Sensor may be angled incorrectly or no obstacle detected")
+        
+        return median_dist
+

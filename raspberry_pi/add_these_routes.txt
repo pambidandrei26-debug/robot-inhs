@@ -1,0 +1,104 @@
+# ADD THESE ROUTES TO web_remote_control_analytics.py
+# Place them BEFORE the "if __name__ == '__main__':" line
+
+@app.route('/download/<filename>')
+def download_file(filename):
+    """Download exported file"""
+    from flask import send_file
+    filepath = os.path.join(DATA_DIR, filename)
+    if os.path.exists(filepath):
+        return send_file(filepath, as_attachment=True, download_name=filename)
+    return jsonify({'error': 'File not found'}), 404
+
+@app.route('/reports')
+def reports_page():
+    """View all available reports"""
+    files = []
+    if os.path.exists(DATA_DIR):
+        for f in os.listdir(DATA_DIR):
+            filepath = os.path.join(DATA_DIR, f)
+            files.append({
+                'name': f,
+                'size': os.path.getsize(filepath),
+                'modified': datetime.fromtimestamp(os.path.getmtime(filepath)).isoformat()
+            })
+    
+    files.sort(key=lambda x: x['modified'], reverse=True)
+    
+    html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Reports & Downloads</title>
+        <style>
+            body { font-family: Arial; background: #f5f5f5; padding: 20px; }
+            .container { max-width: 1000px; margin: 0 auto; }
+            .header { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+            h1 { color: #667eea; }
+            .back-btn { 
+                display: inline-block;
+                padding: 10px 20px;
+                background: #667eea;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                margin-bottom: 20px;
+            }
+            table {
+                width: 100%;
+                background: white;
+                border-radius: 10px;
+                overflow: hidden;
+            }
+            th {
+                background: #667eea;
+                color: white;
+                padding: 15px;
+                text-align: left;
+            }
+            td {
+                padding: 12px 15px;
+                border-bottom: 1px solid #eee;
+            }
+            .download-btn {
+                background: #10b981;
+                color: white;
+                padding: 8px 16px;
+                border-radius: 5px;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <a href="/" class="back-btn">← Back to Dashboard</a>
+            <div class="header">
+                <h1>📊 Reports & Downloads</h1>
+            </div>
+            {% if files %}
+            <table>
+                <tr>
+                    <th>Filename</th>
+                    <th>Size</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+                {% for file in files %}
+                <tr>
+                    <td>{{ file.name }}</td>
+                    <td>{{ "%.2f"|format(file.size / 1024) }} KB</td>
+                    <td>{{ file.modified }}</td>
+                    <td>
+                        <a href="/download/{{ file.name }}" class="download-btn">Download</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <p>No reports yet</p>
+            {% endif %}
+        </div>
+    </body>
+    </html>
+    """
+    return render_template_string(html, files=files)

@@ -1,0 +1,219 @@
+=================================================================
+FORCE UPDATE ANALYTICS DASHBOARD - STEP BY STEP
+=================================================================
+
+PROBLEM: Website still shows "Number of Cracks Detected" input
+CAUSE: Pi has old version OR service didn't restart OR browser cache
+
+=================================================================
+SOLUTION 1: Manual Upload + Hard Restart
+=================================================================
+
+STEP 1: Upload file (PowerShell)
+--------------------------------
+scp "c:\Users\Andrei sam\Downloads\CRACK TRACKING SYSTEM\raspberry_pi\web_data_analytics.py" pi@192.168.168.127:/home/pi/
+
+(Enter password: raspberry)
+
+Wait for "100%" confirmation!
+
+
+STEP 2: SSH into Pi
+-------------------
+ssh pi@192.168.168.127
+
+(Enter password: raspberry)
+
+
+STEP 3: Kill ALL analytics processes (on Pi)
+--------------------------------------------
+sudo pkill -9 -f web_data_analytics
+
+(This FORCE kills all processes)
+
+
+STEP 4: Verify file was uploaded (on Pi)
+----------------------------------------
+ls -lh /home/pi/web_data_analytics.py
+grep -c "Number of Cracks" /home/pi/web_data_analytics.py
+
+Expected output:
+- File size: ~25KB or more
+- Grep count: 0 (zero means manual input is removed!)
+
+If grep shows 0 = SUCCESS! File is updated.
+If grep shows 1+ = FAILED! Old file still there.
+
+
+STEP 5: Start new version (on Pi)
+----------------------------------
+cd /home/pi
+nohup python3 web_data_analytics.py > analytics.log 2>&1 &
+
+Wait 3 seconds for startup.
+
+
+STEP 6: Verify process is running (on Pi)
+------------------------------------------
+ps aux | grep web_data_analytics | grep -v grep
+
+You should see:
+pi   12345  ... python3 web_data_analytics.py
+
+If you see this = SUCCESS! Service running.
+
+
+STEP 7: Check port is open (on Pi)
+-----------------------------------
+sudo netstat -tlnp | grep 8080
+
+You should see:
+tcp  ...  0.0.0.0:8080  ...  LISTEN
+
+If you see this = SUCCESS! Port is open.
+
+
+STEP 8: Exit Pi
+---------------
+exit
+
+
+STEP 9: Clear browser cache
+----------------------------
+In your browser (Chrome/Edge/Firefox):
+1. Press Ctrl+Shift+Delete
+2. Select "Cached images and files"
+3. Click "Clear data"
+
+OR just press Ctrl+F5 (hard refresh)
+
+
+STEP 10: Test
+-------------
+Open: http://192.168.168.127:8080
+
+Scroll to "Save Current Scan" section.
+
+You should see:
+✓ Day Number (0, 7, 14...)
+✓ Location (e.g., Column A-03)
+✓ Session File to Save
+
+You should NOT see:
+✗ Number of Cracks Detected input
+
+If you still see the manual input = OLD FILE STILL LOADED
+If you don't see it = SUCCESS!
+
+
+=================================================================
+SOLUTION 2: Alternative - Direct File Edit on Pi
+=================================================================
+
+If upload keeps failing, edit directly on Pi:
+
+ssh pi@192.168.168.127
+
+# Backup old file
+cp /home/pi/web_data_analytics.py /home/pi/web_data_analytics.py.backup
+
+# Check what version you have
+grep -n "Number of Cracks" /home/pi/web_data_analytics.py
+
+# If it shows a line number, you have the OLD version
+# You need to manually replace the file
+
+exit
+
+
+=================================================================
+TROUBLESHOOTING
+=================================================================
+
+Issue 1: "Permission denied" during upload
+------------------------------------------
+Run on Pi:
+chmod 644 /home/pi/web_data_analytics.py
+
+
+Issue 2: Service won't start
+-----------------------------
+Check error log on Pi:
+tail -50 /home/pi/analytics.log
+
+Common errors:
+- Port 8080 already in use → kill process: sudo pkill -9 -f web_data
+- Python module missing → install: pip3 install flask
+
+
+Issue 3: Browser shows "Connection refused"
+--------------------------------------------
+Service is not running. On Pi:
+ps aux | grep web_data_analytics
+
+If empty, start it:
+nohup python3 ~/web_data_analytics.py > ~/analytics.log 2>&1 &
+
+
+Issue 4: Still shows old version after all steps
+-------------------------------------------------
+This means browser is caching aggressively.
+
+Solution:
+1. Open browser in INCOGNITO/PRIVATE mode
+2. Go to: http://192.168.168.127:8080
+3. Check if manual input is gone
+
+If gone in incognito = Cache issue (clear cache)
+If still there = Upload didn't work (try Solution 2)
+
+
+=================================================================
+VERIFICATION COMMAND (All-in-One)
+=================================================================
+
+Run this single command to check everything:
+
+ssh pi@192.168.168.127 "echo '=== File Check ===' && ls -lh /home/pi/web_data_analytics.py && echo '' && echo '=== Old Code Check ===' && grep -c 'Number of Cracks' /home/pi/web_data_analytics.py && echo '' && echo '=== Process Check ===' && ps aux | grep web_data_analytics | grep -v grep && echo '' && echo '=== Port Check ===' && sudo netstat -tlnp | grep 8080"
+
+Expected output:
+=== File Check ===
+-rw-r--r-- 1 pi pi 25000+ ... web_data_analytics.py
+
+=== Old Code Check ===
+0  <-- THIS SHOULD BE ZERO!
+
+=== Process Check ===
+pi  ... python3 web_data_analytics.py
+
+=== Port Check ===
+tcp ... 0.0.0.0:8080 ... LISTEN
+
+
+If "Old Code Check" shows 0 = File is updated!
+If "Old Code Check" shows 1+ = File is still old!
+
+
+=================================================================
+FINAL CHECK - What You Should See
+=================================================================
+
+BEFORE (Current - Old):
+[X] Number of Cracks Detected
+[9]
+[Save Scan for Day Comparison]
+
+AFTER (New):
+Day Number (0, 7, 14, 21, 28...)
+[7]
+
+Location (e.g., Column A-03)
+[Column A-03, Wall Section B]
+
+Session File to Save
+[dropdown with session files]
+
+[Save Scan for Day Comparison]
+
+NO "Number of Cracks Detected" field!
+

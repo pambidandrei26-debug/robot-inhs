@@ -1,0 +1,98 @@
+=================================================================
+UPLOAD ANALYTICS DASHBOARD (UPDATED VERSION)
+=================================================================
+
+PROBLEM: Website shows OLD VERSION with manual "Number of Cracks" input
+SOLUTION: Upload NEW VERSION with automatic crack detection
+
+=================================================================
+STEP 1: Upload web_data_analytics.py
+=================================================================
+
+Copy and paste this command in PowerShell:
+
+scp "c:\Users\Andrei sam\Downloads\CRACK TRACKING SYSTEM\raspberry_pi\web_data_analytics.py" pi@192.168.168.127:/home/pi/
+
+(Enter password when prompted)
+
+
+=================================================================
+STEP 2: Restart Analytics Dashboard
+=================================================================
+
+SSH into Pi:
+
+ssh pi@192.168.168.127
+
+(Enter password)
+
+
+On Pi, run these commands:
+
+# Kill old analytics process
+pkill -f web_data_analytics
+
+# Start new version
+nohup python3 ~/web_data_analytics.py > ~/analytics.log 2>&1 &
+
+# Exit SSH
+exit
+
+
+=================================================================
+STEP 3: Verify New Version
+=================================================================
+
+Open browser: http://192.168.168.127:8080
+
+You should now see:
+
+✓ NO "Number of Cracks Detected" manual input
+✓ Table with columns: Day | Date | Cracks | Length | Width | Area | Depth
+✓ Automatic crack count from scan reports
+✓ Crack size measurements displayed
+✓ Growth indicators (▲ Growth / ✓ Stable)
+
+
+=================================================================
+WHAT'S NEW IN THIS VERSION
+=================================================================
+
+✓ Automatic crack detection from reports (no manual input)
+✓ Crack size table with measurements:
+  - Length (cm)
+  - Width (cm)  
+  - Area (cm²)
+  - Depth estimate (cm)
+✓ Growth monitoring per dimension
+✓ Baseline vs Latest comparison
+✓ Visual growth indicators
+✓ Download scan data per day
+
+
+=================================================================
+BONUS: Upload BOTH Files at Once
+=================================================================
+
+If you also want to update the live monitor enhancement:
+
+# Upload both files
+scp "c:\Users\Andrei sam\Downloads\CRACK TRACKING SYSTEM\raspberry_pi\web_data_analytics.py" pi@192.168.168.127:/home/pi/
+
+scp "c:\Users\Andrei sam\Downloads\CRACK TRACKING SYSTEM\raspberry_pi\fully_autonomous_wall_scanner.py" pi@192.168.168.127:/home/pi/crack_detector/
+
+
+=================================================================
+TROUBLESHOOTING
+=================================================================
+
+If analytics dashboard doesn't update:
+1. Clear browser cache (Ctrl+Shift+Delete)
+2. Hard refresh (Ctrl+F5)
+3. Check process is running:
+   ssh pi@192.168.168.127 "ps aux | grep web_data_analytics"
+
+If port 8080 is busy:
+   ssh pi@192.168.168.127 "sudo lsof -i :8080"
+   # Kill old process, then restart
+

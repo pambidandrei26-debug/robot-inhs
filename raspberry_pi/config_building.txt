@@ -1,0 +1,11 @@
+# Building/Location Configuration
+# Edit this file to change the building name in reports
+# Format: BuildingName_Date_Time.txt
+#
+# Examples:
+# - INHS_MainBuilding
+# - Science_Lab_2F
+# - Admin_Building
+# - Gymnasium_East
+
+INHS_MainBuilding

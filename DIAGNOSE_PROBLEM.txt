@@ -1,0 +1,223 @@
+=================================================================
+DIAGNOSTIC: Why Analytics Still Shows Old Version
+=================================================================
+
+Run these commands ONE BY ONE to find the problem:
+
+=================================================================
+STEP 1: Check if Pi is reachable
+=================================================================
+
+ping 192.168.168.127 -n 2
+
+Expected: "Reply from 192.168.168.127"
+If timeout = Pi is offline or IP changed
+
+
+=================================================================
+STEP 2: Check what file VERSION is on Pi
+=================================================================
+
+ssh pi@192.168.168.127 "head -50 /home/pi/web_data_analytics.py | grep -c 'Number of Cracks'"
+
+Expected: 
+- 0 = New version (auto)
+- 1+ = Old version (manual input)
+
+If you see 1+ = FILE NOT UPLOADED YET!
+
+
+=================================================================
+STEP 3: Check what PROCESS is running
+=================================================================
+
+ssh pi@192.168.168.127 "ps aux | grep web_data_analytics | grep -v grep"
+
+Expected output:
+pi   12345  0.5  2.1  ... python3 /home/pi/web_data_analytics.py
+
+Look at the FILE PATH after "python3" - is it:
+- /home/pi/web_data_analytics.py  ← CORRECT
+- /home/pi/crack_detector/web_data_analytics.py  ← WRONG LOCATION
+- Different path?  ← WRONG LOCATION
+
+
+=================================================================
+STEP 4: Check when file was last modified
+=================================================================
+
+ssh pi@192.168.168.127 "ls -lh /home/pi/web_data_analytics.py"
+
+Expected:
+-rw-r--r-- 1 pi pi 25KB Oct 18 16:45 web_data_analytics.py
+                           ^^^^^^^^^^^
+                           Should be TODAY's date!
+
+If date is OLD = File not uploaded recently!
+
+
+=================================================================
+STEP 5: Check if port 8080 is actually running
+=================================================================
+
+ssh pi@192.168.168.127 "sudo netstat -tlnp | grep 8080"
+
+Expected:
+tcp ... 0.0.0.0:8080 ... python3
+
+If empty = Service not running!
+
+
+=================================================================
+BASED ON RESULTS:
+=================================================================
+
+If Step 2 shows "1+" (old version):
+→ FILE NOT UPLOADED - Use WinSCP or run scp command manually
+
+If Step 3 shows different path:
+→ WRONG LOCATION - Upload to the path shown in Step 3
+
+If Step 4 shows old date:
+→ UPLOAD FAILED - Try upload again
+
+If Step 5 shows nothing:
+→ SERVICE NOT RUNNING - Restart with commands below
+
+
+=================================================================
+FORCE FIX: Upload + Restart (Manual)
+=================================================================
+
+1. UPLOAD (PowerShell - MUST type password):
+
+scp "c:\Users\Andrei sam\Downloads\CRACK TRACKING SYSTEM\raspberry_pi\web_data_analytics.py" pi@192.168.168.127:/home/pi/
+
+Type password when asked (invisible text is normal)
+WAIT for "100%" message!
+
+
+2. SSH and VERIFY upload:
+
+ssh pi@192.168.168.127
+
+On Pi, check file:
+ls -lh /home/pi/web_data_analytics.py
+grep -c "Number of Cracks" /home/pi/web_data_analytics.py
+
+Should show: 0  ← Zero means new version!
+
+
+3. FORCE KILL old process:
+
+sudo pkill -9 -f web_data_analytics
+ps aux | grep web_data  # Should show NOTHING
+
+
+4. START new version:
+
+cd /home/pi
+python3 web_data_analytics.py &
+
+Wait 3 seconds, then check:
+ps aux | grep web_data  # Should show running process
+
+
+5. EXIT Pi:
+
+exit
+
+
+6. CLEAR browser cache:
+
+Ctrl+Shift+Delete → Clear cache
+OR use Incognito mode
+OR hard refresh: Ctrl+F5
+
+
+7. TEST:
+
+http://192.168.168.127:8080
+
+Should NOT show "Number of Cracks Detected" input!
+
+
+=================================================================
+ALTERNATIVE: Use WinSCP (100% Reliable)
+=================================================================
+
+1. Download WinSCP: https://winscp.net
+2. Connect: 192.168.168.127, user: pi, pass: raspberry
+3. Drag file from PC to Pi /home/pi/
+4. Run restart commands above (steps 3-4)
+
+
+=================================================================
+STILL NOT WORKING? Check these:
+=================================================================
+
+Problem A: Maybe Pi is running DIFFERENT file location
+-------------------------------------------------------
+Check what's actually running:
+
+ssh pi@192.168.168.127 "ps aux | grep python"
+
+You might see:
+python3 /home/pi/crack_detector/web_data_analytics.py  ← Different folder!
+python3 /opt/robot/web_data_analytics.py  ← Different folder!
+
+If so, upload to THAT location instead of /home/pi/
+
+
+Problem B: Maybe there's a STARTUP SCRIPT that restarts old version
+-------------------------------------------------------------------
+Check for auto-start:
+
+ssh pi@192.168.168.127 "crontab -l | grep web_data"
+ssh pi@192.168.168.127 "cat /etc/rc.local | grep web_data"
+
+If you see any, it's auto-starting the old file!
+You need to update the startup script.
+
+
+Problem C: Browser is AGGRESSIVELY caching
+------------------------------------------
+Try:
+1. Open in Incognito/Private mode
+2. Try different browser (Edge if using Chrome)
+3. Check from different device (phone browser)
+
+If Incognito shows NEW version = Cache issue
+If Incognito shows OLD version = Pi issue
+
+
+=================================================================
+LAST RESORT: Manual Edit on Pi
+=================================================================
+
+If upload keeps failing, edit directly on Pi:
+
+ssh pi@192.168.168.127
+nano /home/pi/web_data_analytics.py
+
+Search for line with "Number of Cracks Detected"
+Delete that entire <div> section
+Save: Ctrl+X, Y, Enter
+
+Restart service
+
+
+=================================================================
+SUMMARY
+=================================================================
+
+Most likely cause: FILE NOT UPLOADED TO PI YET
+
+Solution: Use WinSCP or manually run scp command WITH PASSWORD
+
+The scp commands I gave WON'T work automatically - you MUST:
+1. Type the password when prompted
+2. Wait for "100%" completion message
+3. Restart the service on Pi
+4. Clear browser cache
+

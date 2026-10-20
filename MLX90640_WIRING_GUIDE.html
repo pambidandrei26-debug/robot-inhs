@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLX90640 Thermal Camera Wiring Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #e74c3c;
+            margin-top: 30px;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .diagram {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .pin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .pin-table th {
+            background: #3498db;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        .pin-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .pin-table tr:hover {
+            background: #f8f9fa;
+        }
+        .wire-red { color: #e74c3c; font-weight: bold; }
+        .wire-black { color: #2c3e50; font-weight: bold; }
+        .wire-yellow { color: #f39c12; font-weight: bold; }
+        .wire-blue { color: #3498db; font-weight: bold; }
+        .ascii-art {
+            font-family: 'Courier New', monospace;
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            line-height: 1.4;
+        }
+        .checklist {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .checklist li {
+            padding: 8px 0;
+            font-size: 16px;
+        }
+        img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+<h1>🌡️ MLX90640 Thermal Camera Wiring Guide</h1>
+<p style="text-align: center; font-size: 18px; color: #666;">
+    Complete reference for connecting MLX90640 to Raspberry Pi 3 B+
+</p>
+
+<div class="warning">
+    <strong>⚠️ CRITICAL WARNING:</strong>
+    <ul>
+        <li>MLX90640 requires <strong>3.3V ONLY</strong> - connecting to 5V will damage the sensor!</li>
+        <li>Always power off Raspberry Pi before connecting/disconnecting wires</li>
+        <li>Double-check all connections before powering on</li>
+    </ul>
+</div>
+
+<h2>📋 Required Connections</h2>
+
+<table class="pin-table">
+    <thead>
+        <tr>
+            <th>MLX90640 Pin</th>
+            <th>Wire Color</th>
+            <th>Raspberry Pi Pin</th>
+            <th>Pin Number</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>VIN</strong></td>
+            <td class="wire-red">Red</td>
+            <td>3.3V Power</td>
+            <td><strong>Pin 1</strong></td>
+            <td>⚠️ Must be 3.3V, NOT 5V!</td>
+        </tr>
+        <tr>
+            <td><strong>GND</strong></td>
+            <td class="wire-black">Black</td>
+            <td>Ground</td>
+            <td><strong>Pin 6</strong></td>
+            <td>Any GND pin works</td>
+        </tr>
+        <tr>
+            <td><strong>SDA</strong></td>
+            <td class="wire-yellow">Yellow</td>
+            <td>GPIO2 (SDA)</td>
+            <td><strong>Pin 3</strong></td>
+            <td>I2C Data line</td>
+        </tr>
+        <tr>
+            <td><strong>SCL</strong></td>
+            <td class="wire-blue">Blue</td>
+            <td>GPIO3 (SCL)</td>
+            <td><strong>Pin 5</strong></td>
+            <td>I2C Clock line</td>
+        </tr>
+        <tr>
+            <td><strong>3V0</strong></td>
+            <td>-</td>
+            <td>UNCONNECTED</td>
+            <td>-</td>
+            <td>⚠️ Output pin, leave empty!</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>🎯 Raspberry Pi GPIO Pinout</h2>
+
+<div class="diagram">
+    <h3>GPIO Header Layout (View from Top)</h3>
+    <pre class="ascii-art">
+    SD Card Slot →  ┌─────────────────────┐
+                    │                     │
+    ┌───────────────┤                     │
+    │ Pin 1 (3.3V)  │  ●●●●●●●●●●●●●●●●●●●● │  ← Row 1 (Odd pins)
+    │               │  ●●●●●●●●●●●●●●●●●●●● │  ← Row 2 (Even pins)
+    └───────────────┤                     │
+                    │   Raspberry Pi 3    │
+                    └─────────────────────┘
+
+    Detailed Pin Layout:
+    ═══════════════════════════════════════════════════════
+
+         Left Column (Odd)          Right Column (Even)
+    ─────────────────────────────────────────────────────
+         Pin 1  → 3.3V              Pin 2  → 5V
+         Pin 3  → GPIO2 (SDA) ✓     Pin 4  → 5V
+         Pin 5  → GPIO3 (SCL) ✓     Pin 6  → GND ✓
+         Pin 7  → GPIO4             Pin 8  → GPIO14
+         Pin 9  → GND               Pin 10 → GPIO15
+         Pin 11 → GPIO17            Pin 12 → GPIO18
+         Pin 13 → GPIO27            Pin 14 → GND
+         Pin 15 → GPIO22            Pin 16 → GPIO23
+         Pin 17 → 3.3V              Pin 18 → GPIO24
+         Pin 19 → GPIO10            Pin 20 → GND
+         ... (continues to Pin 40)
+
+    ✓ = Used for MLX90640 connection
+    </pre>
+</div>
+
+<h2>🔌 Wiring Diagram</h2>
+
+<div class="diagram">
+    <h3>Connection Schematic</h3>
+    <pre class="ascii-art">
+    MLX90640 Thermal Sensor              Raspberry Pi 3 B+
+    ═══════════════════════              ═════════════════
+    
+    ┌─────────────────┐                  ┌──────────────┐
+    │   [Thermal      │                  │              │
+    │    Lens]        │                  │   SD Card    │
+    │                 │                  │     ↓        │
+    │  Pin Layout:    │                  │  ┌────────┐  │
+    │                 │                  │  │ GPIO   │  │
+    │  ○ VIN  ────────┼──Red Wire────────┼──● Pin 1  │  │ (3.3V)
+    │  ○ 3V0  (empty) │                  │  │        │  │
+    │  ○ GND  ────────┼──Black Wire──────┼──● Pin 6  │  │ (GND)
+    │  ○ SCL  ────────┼──Blue Wire───────┼──● Pin 5  │  │ (GPIO3)
+    │  ○ SDA  ────────┼──Yellow Wire─────┼──● Pin 3  │  │ (GPIO2)
+    │                 │                  │  │        │  │
+    └─────────────────┘                  │  └────────┘  │
+                                         │              │
+                                         └──────────────┘
+    </pre>
+</div>
+
+<h2>🔍 Step-by-Step Connection Guide</h2>
+
+<div class="checklist">
+    <h3>Before You Start:</h3>
+    <ol>
+        <li>✋ Power OFF Raspberry Pi completely</li>
+        <li>📦 Gather materials: MLX90640, 4 jumper wires (female-to-female)</li>
+        <li>🔦 Work in good lighting</li>
+    </ol>
+
+    <h3>Connection Steps:</h3>
+    <ol>
+        <li><strong>Connect VIN (Power):</strong>
+            <ul>
+                <li>Take <span class="wire-red">RED wire</span></li>
+                <li>Connect to MLX90640 <strong>VIN</strong> pin</li>
+                <li>Connect other end to Raspberry Pi <strong>Pin 1</strong> (top-left corner, 3.3V)</li>
+                <li>⚠️ Verify it's Pin 1 (3.3V), NOT Pin 2 (5V)!</li>
+            </ul>
+        </li>
+        <br>
+        <li><strong>Connect GND (Ground):</strong>
+            <ul>
+                <li>Take <span class="wire-black">BLACK wire</span></li>
+                <li>Connect to MLX90640 <strong>GND</strong> pin</li>
+                <li>Connect other end to Raspberry Pi <strong>Pin 6</strong> (3rd row, right side)</li>
+            </ul>
+        </li>
+        <br>
+        <li><strong>Connect SDA (Data):</strong>
+            <ul>
+                <li>Take <span class="wire-yellow">YELLOW wire</span></li>
+                <li>Connect to MLX90640 <strong>SDA</strong> pin</li>
+                <li>Connect other end to Raspberry Pi <strong>Pin 3</strong> (2nd row, left side)</li>
+            </ul>
+        </li>
+        <br>
+        <li><strong>Connect SCL (Clock):</strong>
+            <ul>
+                <li>Take <span class="wire-blue">BLUE wire</span></li>
+                <li>Connect to MLX90640 <strong>SCL</strong> pin</li>
+                <li>Connect other end to Raspberry Pi <strong>Pin 5</strong> (3rd row, left side)</li>
+            </ul>
+        </li>
+        <br>
+        <li><strong>Leave 3V0 Unconnected:</strong>
+            <ul>
+                <li>The 3V0 pin on MLX90640 is an OUTPUT</li>
+                <li>Do NOT connect anything to it</li>
+            </ul>
+        </li>
+    </ol>
+</div>
+
+<h2>✅ Verification Checklist</h2>
+
+<div class="checklist">
+    <h3>Before Powering On:</h3>
+    <ul>
+        <li>☐ VIN connected to Pin 1 (3.3V) - NOT Pin 2!</li>
+        <li>☐ GND connected to Pin 6 (or any GND)</li>
+        <li>☐ SDA connected to Pin 3 (GPIO2)</li>
+        <li>☐ SCL connected to Pin 5 (GPIO3)</li>
+        <li>☐ 3V0 pin is left unconnected</li>
+        <li>☐ All wires firmly inserted</li>
+        <li>☐ No wires touching each other</li>
+    </ul>
+
+    <h3>After Powering On:</h3>
+    <ol>
+        <li>Boot Raspberry Pi</li>
+        <li>SSH into Pi</li>
+        <li>Run: <code>sudo i2cdetect -y 1</code></li>
+        <li>Should see <strong>33</strong> in the output grid</li>
+        <li>Run: <code>cd ~/crack_detector && python3 test_thermal.py</code></li>
+        <li>Should see temperature readings</li>
+    </ol>
+</div>
+
+<h2>🔧 Troubleshooting</h2>
+
+<div class="diagram">
+    <h3>If No Device Detected (No "33" in i2cdetect):</h3>
+    <table class="pin-table">
+        <thead>
+            <tr>
+                <th>Problem</th>
+                <th>Check</th>
+                <th>Solution</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Wrong voltage</td>
+                <td>Is VIN on Pin 1 or Pin 2?</td>
+                <td>Move to Pin 1 (3.3V)</td>
+            </tr>
+            <tr>
+                <td>Swapped wires</td>
+                <td>Is SDA on Pin 3 and SCL on Pin 5?</td>
+                <td>Swap them if reversed</td>
+            </tr>
+            <tr>
+                <td>Loose connection</td>
+                <td>Are wires fully inserted?</td>
+                <td>Push firmly into place</td>
+            </tr>
+            <tr>
+                <td>Wrong I2C pins</td>
+                <td>Using Pin 3 and 5?</td>
+                <td>Must use hardware I2C pins</td>
+            </tr>
+            <tr>
+                <td>I2C not enabled</td>
+                <td>Run lsmod | grep i2c</td>
+                <td>Enable in raspi-config</td>
+            </tr>
+            <tr>
+                <td>3V0 connected</td>
+                <td>Is 3V0 pin connected?</td>
+                <td>Disconnect it!</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="success">
+    <h3>✅ Success Indicators:</h3>
+    <ul>
+        <li><code>sudo i2cdetect -y 1</code> shows <strong>33</strong> at row 30, column 3</li>
+        <li><code>python3 test_thermal.py</code> shows temperature readings (20-30°C typical)</li>
+        <li>Web interface shows thermal camera feed</li>
+    </ul>
+</div>
+
+<h2>📚 Reference Images</h2>
+
+<div class="diagram">
+    <p><strong>Raspberry Pi GPIO Pinout:</strong></p>
+    <p>For detailed pinout diagram, visit: <a href="https://pinout.xyz" target="_blank">https://pinout.xyz</a></p>
+    
+    <p><strong>MLX90640 Datasheet:</strong></p>
+    <p>For sensor specifications: <a href="https://learn.adafruit.com/adafruit-mlx90640-ir-thermal-camera" target="_blank">Adafruit MLX90640 Guide</a></p>
+</div>
+
+<h2>🧪 Testing Commands</h2>
+
+<div class="diagram">
+    <pre class="ascii-art">
+# After wiring, run these commands:
+
+# 1. Check I2C is enabled
+lsmod | grep i2c_dev
+
+# 2. Scan for I2C devices (should see "33")
+sudo i2cdetect -y 1
+
+# 3. Test thermal camera
+cd ~/crack_detector
+python3 test_thermal.py
+
+# 4. Run full robot with thermal
+python3 web_remote_control.py
+
+# 5. Access web interface
+# Open browser: http://192.168.168.106:5000
+    </pre>
+</div>
+
+<div class="warning">
+    <h3>⚠️ Common Mistakes to Avoid:</h3>
+    <ul>
+        <li><strong>Using 5V instead of 3.3V</strong> - This is the #1 mistake! Always use Pin 1 (3.3V)</li>
+        <li><strong>Swapping SDA and SCL</strong> - SDA=Pin 3, SCL=Pin 5 (not the other way)</li>
+        <li><strong>Connecting 3V0 pin</strong> - This is an OUTPUT, leave it empty</li>
+        <li><strong>Using wrong GPIO pins</strong> - Must use hardware I2C (Pin 3 & 5)</li>
+        <li><strong>Loose connections</strong> - Push wires firmly until they click</li>
+    </ul>
+</div>
+
+<footer style="text-align: center; margin-top: 50px; padding: 20px; border-top: 2px solid #ddd;">
+    <p><strong>Crack Detection Robot - MLX90640 Wiring Guide</strong></p>
+    <p>For questions or issues, refer to test_thermal.py output for diagnostics</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+# Python dependencies for Raspberry Pi
+# Install with: pip3 install -r requirements.txt
+
+# Camera support
+picamera2
+opencv-python
+
+# Serial communication
+pyserial
+
+# Thermal camera
+adafruit-circuitpython-mlx90640
+adafruit-blinka
+
+# Data processing
+numpy
+
+# Optional: for thermal viewer
+matplotlib
+
+# System libraries (install via apt)
+# sudo apt install -y python3-picamera2 python3-opencv i2c-tools python3-smbus
